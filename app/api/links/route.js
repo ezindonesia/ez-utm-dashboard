@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 
+export const dynamic = 'force-dynamic';
+
 function getSupabase() {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
@@ -28,32 +30,45 @@ export async function GET() {
 export async function POST(request) {
   const supabase = getSupabase();
   if (!supabase) {
-    return NextResponse.json(
-      { error: 'Supabase environment variables not configured yet.' },
-      { status: 400 }
-    );
+    return NextResponse.json({ error: 'Supabase not configured' }, { status: 500 });
   }
 
-  const body = await request.json();
-  const { data, error } = await supabase
-    .from('utm_links')
-    .insert([
-      {
-        slug: body.slug,
-        brand: body.brand,
-        placement: body.placement,
-        destination_url: body.destination_url,
-        utm_source: body.utm_source,
-        utm_medium: body.utm_medium,
-        utm_campaign: body.utm_campaign,
-        utm_content: body.utm_content,
-      },
-    ])
-    .select()
-    .single();
+  try {
+    const body = await request.json();
+    const {
+      slug,
+      brand,
+      placement,
+      destination_url,
+      utm_source,
+      utm_medium,
+      utm_campaign,
+      utm_content,
+    } = body;
 
-  if (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    const { data, error } = await supabase
+      .from('utm_links')
+      .insert([
+        {
+          slug,
+          brand,
+          placement,
+          destination_url,
+          utm_source,
+          utm_medium,
+          utm_campaign,
+          utm_content,
+          clicks: 0,
+        },
+      ])
+      .select()
+      .single();
+
+    if (error) {
+      return NextResponse.json({ error: error.message }, { status: 500 });
+    }
+    return NextResponse.json({ link: data });
+  } catch (err) {
+    return NextResponse.json({ error: err.message }, { status: 500 });
   }
-  return NextResponse.json({ link: data });
 }
