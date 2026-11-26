@@ -18,9 +18,6 @@ import {
   RefreshCw,
   Calendar,
   Users,
-  QrCode,
-  Megaphone,
-  Compass,
 } from 'lucide-react';
 
 const INITIAL_LINKS = [];
@@ -43,7 +40,6 @@ export default function UTMFunnelDashboard() {
   const [brandFilter, setBrandFilter] = useState('All');
   const [pillarFilter, setPillarFilter] = useState('all');
 
-  // Calendar state
   const [datePreset, setDatePreset] = useState('30d');
   const [startDate, setStartDate] = useState(() => getPresetDates('30d').startDate);
   const [endDate, setEndDate] = useState(() => getPresetDates('30d').endDate);
@@ -61,7 +57,6 @@ export default function UTMFunnelDashboard() {
   const [importText, setImportText] = useState('');
   const [saving, setSaving] = useState(false);
 
-  // Builder form state targeting globa-ez.com
   const [formBrand, setFormBrand] = useState('EZ Mobile');
   const [formPlacement, setFormPlacement] = useState('profile');
   const [formSource, setFormSource] = useState('instagram');
@@ -241,7 +236,7 @@ export default function UTMFunnelDashboard() {
       }
 
       const parsedVouchers = (ga4Data.voucherRows || [])
-        .filter((r) => r.dimensionValues?.[3]?.value && r.dimensionValues[3].value !== '(not set)')
+        .filter((r) => r.dimensionValues?.[3]?.value && r.dimensionValues?.[3].value !== '(not set)')
         .map((r) => {
           const src = r.dimensionValues[0].value;
           const camp = r.dimensionValues[1].value;
@@ -352,7 +347,6 @@ export default function UTMFunnelDashboard() {
     }
   };
 
-  // Filter GA4 journeys by Brand & Pillar
   const filteredJourneys = useMemo(() => {
     return journeyPaths.filter((j) => {
       const brandOk = brandFilter === 'All' || j.brand === brandFilter;
@@ -369,7 +363,6 @@ export default function UTMFunnelDashboard() {
     });
   }, [links, brandFilter, pillarFilter]);
 
-  // 4-Pillar Comparison Summary (Paid vs Organic vs Offline QR vs Outside Consensus)
   const pillarComparison = useMemo(() => {
     const base = {
       paid: { label: '1. Paid Ads (Meta / TikTok / Google)', sessions: 0, engaged: 0, checkouts: 0, purchases: 0, revenue: 0 },
@@ -407,7 +400,6 @@ export default function UTMFunnelDashboard() {
     return { clicks: linkClicks, ...ga4Totals };
   }, [filteredLinks, filteredJourneys]);
 
-  // Audience Breakdown Aggregations
   const audienceBreakdown = useMemo(() => {
     const filtered = audienceSegments.filter(
       (a) => pillarFilter === 'all' || a.pillar === pillarFilter
@@ -461,7 +453,6 @@ export default function UTMFunnelDashboard() {
     setTimeout(() => setCopiedId(null), 1800);
   };
 
-  // CSV Importer for Social Views, Reach, Saves & Shares
   const handleImportCsv = () => {
     if (!importText.trim()) return;
     const rows = importText.trim().split('\n').slice(1);
@@ -503,8 +494,8 @@ export default function UTMFunnelDashboard() {
     { label: '1. Tracked Short Link / QR Clicks (Supabase)', value: totals.clicks, color: 'bg-indigo-600' },
     { label: '2. Website Landing Sessions on globa-ez.com (GA4)', value: totals.sessions, color: 'bg-blue-600' },
     { label: '3. Engaged Plan / Product Views (GA4)', value: totals.engaged, color: 'bg-cyan-600' },
-    { label: '4. Checkout Started (`begin_checkout`)', value: totals.checkouts, color: 'bg-teal-600' },
-    { label: '5. Completed Orders (`purchase`)', value: totals.purchases, color: 'bg-emerald-600' },
+    { label: '4. Checkout Started (begin_checkout)', value: totals.checkouts, color: 'bg-teal-600' },
+    { label: '5. Completed Orders (purchase)', value: totals.purchases, color: 'bg-emerald-600' },
   ];
 
   return (
@@ -537,7 +528,6 @@ export default function UTMFunnelDashboard() {
               </div>
             </div>
 
-            {/* Calendar & Date Range Controls */}
             <div className="flex flex-wrap items-center gap-2 bg-slate-800/90 p-1.5 rounded-xl border border-slate-700">
               <Calendar className="w-4 h-4 text-indigo-400 ml-1.5" />
               {[
@@ -586,7 +576,6 @@ export default function UTMFunnelDashboard() {
             </div>
           </div>
 
-          {/* Brand + 4-Pillar Filters */}
           <div className="flex flex-wrap items-center justify-between gap-2 pt-1">
             <div className="flex flex-wrap items-center gap-2">
               <div className="bg-slate-800 p-1 rounded-lg flex items-center text-xs font-medium">
@@ -641,7 +630,6 @@ export default function UTMFunnelDashboard() {
           </div>
         </div>
 
-        {/* Navigation Tabs */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 flex gap-6 text-sm font-medium border-t border-slate-800/80 overflow-x-auto">
           {[
             { id: 'overview', label: 'Marketing vs. Outside Funnel', icon: BarChart3 },
@@ -671,7 +659,6 @@ export default function UTMFunnelDashboard() {
       </header>
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 py-8 space-y-6">
-        {/* Top KPI Cards */}
         <div className="grid grid-cols-2 lg:grid-cols-5 gap-4">
           <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
             <div className="text-xs text-slate-500 font-medium">Short Link / QR Clicks</div>
@@ -708,14 +695,12 @@ export default function UTMFunnelDashboard() {
           </div>
         </div>
 
-        {/* TAB 1: 4-PILLAR MARKETING VS OUTSIDE BASELINE + FULL FUNNEL */}
         {activeTab === 'overview' && (
           <div className="space-y-6">
-            {/* 4-Pillar Scorecard */}
             <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
               <div className="mb-4">
                 <h2 className="font-bold text-base">
-                  Marketing Activities vs. "Outside" Consensus Evaluation
+                  Marketing Activities vs. &quot;Outside&quot; Consensus Evaluation
                 </h2>
                 <p className="text-xs text-slate-500">
                   Compare Paid Ads, Organic Social, and Offline QR campaigns against baseline Direct & Search demand
@@ -752,7 +737,6 @@ export default function UTMFunnelDashboard() {
               </div>
             </div>
 
-            {/* Full Website Conversion Funnel */}
             <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
               <div className="flex items-center justify-between mb-4">
                 <div>
@@ -789,7 +773,6 @@ export default function UTMFunnelDashboard() {
               </div>
             </div>
 
-            {/* Managed Links & Offline QR Performance Table */}
             <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
               <div className="p-5 border-b border-slate-200 flex items-center justify-between">
                 <div>
@@ -812,4 +795,616 @@ export default function UTMFunnelDashboard() {
                     <tr>
                       <th className="py-3 px-4">Brand & Pillar</th>
                       <th className="py-3 px-4">Short Link / QR</th>
-                      <th className="py-3
+                      <th className="py-3 px-4">Source / Campaign / Content</th>
+                      <th className="py-3 px-4 text-right">Clicks/Scans</th>
+                      <th className="py-3 px-4 text-right">Sessions</th>
+                      <th className="py-3 px-4 text-right">Orders</th>
+                      <th className="py-3 px-4 text-right">Revenue</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-100">
+                    {filteredLinks.length > 0 ? (
+                      filteredLinks.map((link) => {
+                        const fullShort = `${originHost}/r/${link.slug}`;
+                        return (
+                          <tr key={link.id} className="hover:bg-slate-50/80">
+                            <td className="py-3 px-4">
+                              <div className="font-semibold text-slate-900">{link.brand}</div>
+                              <span className="inline-block mt-0.5 px-2 py-0.5 rounded text-[10px] font-medium bg-indigo-50 text-indigo-700 uppercase">
+                                {link.placement}
+                              </span>
+                            </td>
+                            <td className="py-3 px-4">
+                              <div className="flex items-center gap-1.5 font-mono text-indigo-600 font-medium">
+                                <span>/r/{link.slug}</span>
+                                <button
+                                  onClick={() => copyText(fullShort, link.id)}
+                                  className="p-1 hover:bg-slate-200 rounded text-slate-600"
+                                >
+                                  {copiedId === link.id ? (
+                                    <Check className="w-3.5 h-3.5 text-emerald-600" />
+                                  ) : (
+                                    <Copy className="w-3.5 h-3.5" />
+                                  )}
+                                </button>
+                              </div>
+                              <div className="text-[11px] text-slate-400 truncate max-w-[180px]">
+                                {link.destination_url}
+                              </div>
+                            </td>
+                            <td className="py-3 px-4">
+                              <div className="font-medium capitalize">{link.utm_source}</div>
+                              <div className="text-[11px] text-slate-500 font-mono">
+                                {link.utm_campaign} &bull; {link.utm_content}
+                              </div>
+                            </td>
+                            <td className="py-3 px-4 text-right font-semibold">
+                              {(link.clicks || 0).toLocaleString()}
+                            </td>
+                            <td className="py-3 px-4 text-right font-semibold">
+                              {(link.sessions || 0).toLocaleString()}
+                            </td>
+                            <td className="py-3 px-4 text-right font-semibold">
+                              {(link.purchases || 0).toLocaleString()}
+                            </td>
+                            <td className="py-3 px-4 text-right font-bold text-emerald-700">
+                              ${(link.revenue || 0).toLocaleString()}
+                            </td>
+                          </tr>
+                        );
+                      })
+                    ) : (
+                      <tr>
+                        <td colSpan={7} className="py-8 text-center text-slate-400">
+                          No short links created yet. Click <strong>Create Link / QR</strong> to add your first social, ad, or offline QR link.
+                        </td>
+                      </tr>
+                    )}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {activeTab === 'journey' && (
+          <div className="space-y-6">
+            <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm space-y-6">
+              <div>
+                <h2 className="font-bold text-base">
+                  Customer Journey Flow on globa-ez.com ({startDate} &rarr; {endDate})
+                </h2>
+                <p className="text-xs text-slate-500">
+                  Real entry channels, landing pages, and checkout completions from Google Analytics 4
+                </p>
+              </div>
+
+              <div className="grid md:grid-cols-3 gap-4">
+                <div className="p-4 rounded-xl bg-indigo-50 border border-indigo-100 space-y-2">
+                  <div className="text-xs font-bold uppercase text-indigo-700">1. Top Entry Sources</div>
+                  {journeySummary.topSources.length > 0 ? (
+                    journeySummary.topSources.map(([src, count]) => (
+                      <div
+                        key={src}
+                        className="bg-white p-2.5 rounded-lg border border-indigo-100 text-xs flex justify-between items-center"
+                      >
+                        <span className="font-medium">{src}</span>
+                        <span className="font-bold text-indigo-700">{count.toLocaleString()}</span>
+                      </div>
+                    ))
+                  ) : (
+                    <div className="text-xs text-slate-500">No GA4 sessions in this date range.</div>
+                  )}
+                </div>
+
+                <div className="p-4 rounded-xl bg-teal-50 border border-teal-100 space-y-2">
+                  <div className="text-xs font-bold uppercase text-teal-700">2. Top Landing Pages</div>
+                  {journeySummary.topLandingPages.length > 0 ? (
+                    journeySummary.topLandingPages.map(([page, count]) => (
+                      <div
+                        key={page}
+                        className="bg-white p-2.5 rounded-lg border border-teal-100 text-xs flex justify-between items-center gap-2"
+                      >
+                        <span className="font-mono truncate">{page}</span>
+                        <span className="font-bold text-teal-700 shrink-0">{count.toLocaleString()}</span>
+                      </div>
+                    ))
+                  ) : (
+                    <div className="text-xs text-slate-500">No landing page data yet.</div>
+                  )}
+                </div>
+
+                <div className="p-4 rounded-xl bg-emerald-50 border border-emerald-100 space-y-2">
+                  <div className="text-xs font-bold uppercase text-emerald-700">3. Journey Conversion</div>
+                  <div className="bg-white p-3 rounded-lg border border-emerald-100 text-xs flex justify-between font-bold">
+                    <span>Engaged Sessions</span>
+                    <span>{totals.engaged.toLocaleString()}</span>
+                  </div>
+                  <div className="bg-white p-3 rounded-lg border border-emerald-100 text-xs flex justify-between font-bold text-teal-700">
+                    <span>Checkouts Started</span>
+                    <span>{totals.checkouts.toLocaleString()}</span>
+                  </div>
+                  <div className="bg-white p-3 rounded-lg border border-emerald-100 text-xs flex justify-between font-bold text-emerald-700">
+                    <span>Completed Orders</span>
+                    <span>{totals.purchases.toLocaleString()}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+              <div className="p-5 border-b border-slate-200">
+                <h3 className="font-bold text-base">All GA4 Traffic & Journey Paths</h3>
+              </div>
+              <div className="overflow-x-auto">
+                <table className="w-full text-left text-xs">
+                  <thead className="bg-slate-50 text-slate-500 uppercase border-b border-slate-200">
+                    <tr>
+                      <th className="py-3 px-4">Pillar / Channel</th>
+                      <th className="py-3 px-4">Source / Medium</th>
+                      <th className="py-3 px-4">Campaign / Content</th>
+                      <th className="py-3 px-4">Landing Page</th>
+                      <th className="py-3 px-4 text-right">Sessions</th>
+                      <th className="py-3 px-4 text-right">Engaged</th>
+                      <th className="py-3 px-4 text-right">Orders</th>
+                      <th className="py-3 px-4 text-right">Revenue</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-100">
+                    {filteredJourneys.length > 0 ? (
+                      filteredJourneys.slice(0, 60).map((j) => (
+                        <tr key={j.id} className="hover:bg-slate-50">
+                          <td className="py-3 px-4 font-semibold capitalize">{j.channelGroup}</td>
+                          <td className="py-3 px-4">
+                            {j.utm_source} / {j.utm_medium}
+                          </td>
+                          <td className="py-3 px-4 font-mono text-slate-600">
+                            {j.utm_campaign} &bull; {j.utm_content}
+                          </td>
+                          <td className="py-3 px-4 font-mono text-indigo-600">{j.landing_page}</td>
+                          <td className="py-3 px-4 text-right font-semibold">{j.sessions}</td>
+                          <td className="py-3 px-4 text-right">{j.engaged}</td>
+                          <td className="py-3 px-4 text-right font-semibold">{j.purchases}</td>
+                          <td className="py-3 px-4 text-right font-bold text-emerald-700">
+                            ${j.revenue.toLocaleString()}
+                          </td>
+                        </tr>
+                      ))
+                    ) : (
+                      <tr>
+                        <td colSpan={8} className="py-6 text-center text-slate-400">
+                          No GA4 rows found for this date range and filter.
+                        </td>
+                      </tr>
+                    )}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {activeTab === 'audience' && (
+          <div className="space-y-6">
+            <div className="grid md:grid-cols-3 gap-6">
+              <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+                <h3 className="font-bold text-sm mb-3">Audience by Country (GA4)</h3>
+                <div className="space-y-2 text-xs">
+                  {audienceBreakdown.countries.length > 0 ? (
+                    audienceBreakdown.countries.map(([country, stats]) => (
+                      <div key={country} className="flex justify-between py-1.5 border-b border-slate-100">
+                        <span className="font-medium">{country}</span>
+                        <span>
+                          <strong>{stats.sessions}</strong> sess &bull;{' '}
+                          <span className="text-emerald-700 font-semibold">{stats.purchases} ord</span>
+                        </span>
+                      </div>
+                    ))
+                  ) : (
+                    <div className="text-slate-400">No country data in selected range.</div>
+                  )}
+                </div>
+              </div>
+
+              <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+                <h3 className="font-bold text-sm mb-3">Audience by Device (GA4)</h3>
+                <div className="space-y-2 text-xs">
+                  {audienceBreakdown.devices.length > 0 ? (
+                    audienceBreakdown.devices.map(([device, stats]) => (
+                      <div key={device} className="flex justify-between py-1.5 border-b border-slate-100">
+                        <span className="font-medium capitalize">{device}</span>
+                        <span>
+                          <strong>{stats.sessions}</strong> sess &bull;{' '}
+                          <span className="text-emerald-700 font-semibold">{stats.purchases} ord</span>
+                        </span>
+                      </div>
+                    ))
+                  ) : (
+                    <div className="text-slate-400">No device data in selected range.</div>
+                  )}
+                </div>
+              </div>
+
+              <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+                <h3 className="font-bold text-sm mb-3">New vs. Returning Visitors</h3>
+                <div className="space-y-2 text-xs">
+                  {audienceBreakdown.userTypes.length > 0 ? (
+                    audienceBreakdown.userTypes.map(([uType, stats]) => (
+                      <div key={uType} className="flex justify-between py-1.5 border-b border-slate-100">
+                        <span className="font-medium capitalize">{uType}</span>
+                        <span>
+                          <strong>{stats.sessions}</strong> sess &bull;{' '}
+                          <span className="text-emerald-700 font-semibold">${stats.revenue.toLocaleString()}</span>
+                        </span>
+                      </div>
+                    ))
+                  ) : (
+                    <div className="text-slate-400">No visitor type data yet.</div>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+              <div className="p-5 border-b border-slate-200 flex items-center justify-between">
+                <div>
+                  <h3 className="font-bold text-base">
+                    Content Resonance Scorecard (Social Views & Reach &rarr; Clicks)
+                  </h3>
+                  <p className="text-xs text-slate-500">
+                    Upload TikTok Studio or Meta Business Suite CSVs to evaluate which posts resonated best
+                  </p>
+                </div>
+                <button
+                  onClick={() => setShowImportModal(true)}
+                  className="px-3 py-1.5 bg-indigo-600 text-white rounded-lg text-xs font-medium flex items-center gap-1.5"
+                >
+                  <Upload className="w-3.5 h-3.5" />
+                  Upload Social CSV
+                </button>
+              </div>
+              <div className="overflow-x-auto">
+                <table className="w-full text-left text-xs">
+                  <thead className="bg-slate-50 text-slate-500 uppercase border-b border-slate-200">
+                    <tr>
+                      <th className="py-3 px-4">Brand / Platform</th>
+                      <th className="py-3 px-4">Post / Reel / Video</th>
+                      <th className="py-3 px-4 text-right">Views</th>
+                      <th className="py-3 px-4 text-right">Reach</th>
+                      <th className="py-3 px-4 text-right">Saves + Shares</th>
+                      <th className="py-3 px-4 text-right">Resonance %</th>
+                      <th className="py-3 px-4 text-right">Link Clicks (CTR)</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-100">
+                    {socialContent.length > 0 ? (
+                      socialContent.map((item) => (
+                        <tr key={item.id} className="hover:bg-slate-50">
+                          <td className="py-3 px-4 font-semibold">
+                            {item.brand} &bull; <span className="capitalize">{item.platform}</span>
+                          </td>
+                          <td className="py-3 px-4">{item.postTitle}</td>
+                          <td className="py-3 px-4 text-right font-semibold">{item.views.toLocaleString()}</td>
+                          <td className="py-3 px-4 text-right">{item.reach.toLocaleString()}</td>
+                          <td className="py-3 px-4 text-right">{item.savesShares.toLocaleString()}</td>
+                          <td className="py-3 px-4 text-right font-bold text-indigo-600">{item.resonanceRate}%</td>
+                          <td className="py-3 px-4 text-right font-semibold text-emerald-700">
+                            {item.clicks.toLocaleString()} ({item.ctr}%)
+                          </td>
+                        </tr>
+                      ))
+                    ) : (
+                      <tr>
+                        <td colSpan={7} className="py-8 text-center text-slate-400">
+                          Click <strong>Upload Social CSV</strong> to import TikTok, Instagram, or Threads views and reach for EZ Mobile & EZ eSIM.
+                        </td>
+                      </tr>
+                    )}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {activeTab === 'builder' && (
+          <div className="grid lg:grid-cols-5 gap-6">
+            <form
+              onSubmit={handleCreateLink}
+              className="lg:col-span-3 bg-white p-6 rounded-xl border border-slate-200 shadow-sm space-y-4"
+            >
+              <div className="flex items-center justify-between flex-wrap gap-2">
+                <h2 className="font-bold text-base">Create Short Link or Offline QR Code</h2>
+                <div className="flex gap-1.5 flex-wrap">
+                  {[
+                    { label: 'EZ Mobile IG Bio', b: 'EZ Mobile', p: 'profile', s: 'instagram', m: 'organic_social' },
+                    { label: 'EZ eSIM TikTok', b: 'EZ eSIM', p: 'content', s: 'tiktok', m: 'organic_social' },
+                    { label: 'Offline Booth QR', b: 'EZ eSIM', p: 'offline', s: 'airport_booth', m: 'qr' },
+                    { label: 'Paid Meta Ad', b: 'EZ Mobile', p: 'content', s: 'facebook', m: 'paid_social' },
+                  ].map((pr) => (
+                    <button
+                      type="button"
+                      key={pr.label}
+                      onClick={() => handlePreset(pr.b, pr.p, pr.s, pr.m)}
+                      className="text-[11px] px-2 py-1 rounded bg-slate-100 hover:bg-indigo-50 hover:text-indigo-700 font-medium"
+                    >
+                      {pr.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div className="grid sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-xs font-semibold text-slate-700 mb-1">1. Brand</label>
+                  <select
+                    value={formBrand}
+                    onChange={(e) => setFormBrand(e.target.value)}
+                    className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm"
+                  >
+                    <option value="EZ Mobile">EZ Mobile</option>
+                    <option value="EZ eSIM">EZ eSIM</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-xs font-semibold text-slate-700 mb-1">
+                    2. Activation Type
+                  </label>
+                  <select
+                    value={formPlacement}
+                    onChange={(e) => {
+                      const val = e.target.value;
+                      setFormPlacement(val);
+                      if (val === 'offline') {
+                        setFormMedium('qr');
+                        setFormContent('offline_qr_stand');
+                      } else if (val === 'profile') {
+                        setFormMedium('organic_social');
+                        setFormContent('profile_bio_link');
+                      } else {
+                        setFormMedium('organic_social');
+                        setFormContent('content_post_cta');
+                      }
+                    }}
+                    className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm"
+                  >
+                    <option value="profile">Profile Bio / Linktree</option>
+                    <option value="content">Social Post / Reel / Paid Ad</option>
+                    <option value="offline">Offline QR Code / Flyer / Booth</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="grid sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-xs font-semibold text-slate-700 mb-1">
+                    Source (utm_source)
+                  </label>
+                  <input
+                    type="text"
+                    value={formSource}
+                    onChange={(e) => setFormSource(e.target.value)}
+                    className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm font-mono"
+                    placeholder="instagram, tiktok, airport_booth"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-semibold text-slate-700 mb-1">
+                    Medium (utm_medium)
+                  </label>
+                  <input
+                    type="text"
+                    value={formMedium}
+                    onChange={(e) => setFormMedium(e.target.value)}
+                    className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm font-mono"
+                    placeholder="organic_social, paid_social, qr"
+                  />
+                </div>
+              </div>
+
+              <div className="grid sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-xs font-semibold text-slate-700 mb-1">
+                    Campaign (utm_campaign)
+                  </label>
+                  <input
+                    type="text"
+                    value={formCampaign}
+                    onChange={(e) => setFormCampaign(e.target.value)}
+                    className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm font-mono"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-semibold text-slate-700 mb-1">
+                    Placement Detail (utm_content)
+                  </label>
+                  <input
+                    type="text"
+                    value={formContent}
+                    onChange={(e) => setFormContent(e.target.value)}
+                    className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm font-mono"
+                  />
+                </div>
+              </div>
+
+              <div className="grid sm:grid-cols-3 gap-4">
+                <div className="sm:col-span-2">
+                  <label className="block text-xs font-semibold text-slate-700 mb-1">
+                    Destination URL on globa-ez.com
+                  </label>
+                  <input
+                    type="url"
+                    required
+                    value={formDestination}
+                    onChange={(e) => setFormDestination(e.target.value)}
+                    className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-semibold text-slate-700 mb-1">
+                    Custom Short Slug
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    value={formSlug}
+                    onChange={(e) => setFormSlug(e.target.value)}
+                    className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm font-mono"
+                  />
+                </div>
+              </div>
+
+              <button
+                type="submit"
+                disabled={saving}
+                className="w-full py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg text-sm flex items-center justify-center gap-2"
+              >
+                <Sparkles className="w-4 h-4" />
+                {saving ? 'Saving to Supabase...' : 'Generate & Save Trackable Link'}
+              </button>
+            </form>
+
+            <div className="lg:col-span-2 bg-slate-900 text-white p-6 rounded-xl space-y-5">
+              <h3 className="font-bold text-base">Live Short Link & QR Target</h3>
+              <div className="bg-slate-800 p-4 rounded-lg border border-slate-700 space-y-2">
+                <div className="text-xs text-slate-400">Use this URL in Social Bios, Ads, or QR Generators:</div>
+                <div className="font-mono text-sm text-indigo-300 break-all">{shortUrl}</div>
+                <button
+                  type="button"
+                  onClick={() => copyText(shortUrl, 'preview-short')}
+                  className="mt-2 px-3 py-1.5 bg-indigo-600 hover:bg-indigo-500 rounded text-xs font-medium inline-flex items-center gap-1.5"
+                >
+                  {copiedId === 'preview-short' ? (
+                    <>
+                      <Check className="w-3.5 h-3.5" /> Copied!
+                    </>
+                  ) : (
+                    <>
+                      <Copy className="w-3.5 h-3.5" /> Copy Short Link
+                    </>
+                  )}
+                </button>
+              </div>
+              <div className="bg-slate-800 p-4 rounded-lg border border-slate-700 space-y-2">
+                <div className="text-xs text-slate-400">Full Tagged URL Redirecting to globa-ez.com:</div>
+                <div className="font-mono text-xs text-slate-300 break-all">{fullUtmUrl}</div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {activeTab === 'vouchers' && (
+          <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+            <div className="p-5 border-b border-slate-200">
+              <h2 className="font-bold text-base">Checkout Voucher Attribution (order_coupon)</h2>
+              <p className="text-xs text-slate-500">
+                Promo codes redeemed on globa-ez.com matched to originating marketing campaigns
+              </p>
+            </div>
+            <div className="overflow-x-auto">
+              <table className="w-full text-left text-xs">
+                <thead className="bg-slate-50 text-slate-500 uppercase border-b border-slate-200">
+                  <tr>
+                    <th className="py-3 px-4">Voucher Code</th>
+                    <th className="py-3 px-4">Brand</th>
+                    <th className="py-3 px-4">Driving UTM</th>
+                    <th className="py-3 px-4 text-right">Redemptions</th>
+                    <th className="py-3 px-4 text-right">Revenue</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-100">
+                  {vouchers.length > 0 ? (
+                    vouchers.map((v, i) => (
+                      <tr key={`${v.code}-${i}`} className="hover:bg-slate-50">
+                        <td className="py-3 px-4 font-mono font-bold text-indigo-600">{v.code}</td>
+                        <td className="py-3 px-4">{v.sourceBrand}</td>
+                        <td className="py-3 px-4 font-mono text-slate-500">{v.topUtm}</td>
+                        <td className="py-3 px-4 text-right font-semibold">{v.uses}</td>
+                        <td className="py-3 px-4 text-right font-bold text-emerald-700">
+                          ${v.revenue.toLocaleString()}
+                        </td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr>
+                      <td colSpan={5} className="py-6 text-center text-slate-400">
+                        No checkout coupon redemptions recorded in GA4 for this date range.
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
+
+        {activeTab === 'setup' && (
+          <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm space-y-4">
+            <h2 className="font-bold text-base">globa-ez.com Purchase & Coupon Event Snippet</h2>
+            <p className="text-xs text-slate-600">
+              Ensure your globa-ez.com checkout confirmation page pushes coupon and item_brand into GA4:
+            </p>
+            <pre className="bg-slate-900 text-slate-100 p-4 rounded-lg text-xs overflow-x-auto font-mono">
+{`window.dataLayer = window.dataLayer || [];
+window.dataLayer.push({
+  event: 'purchase',
+  ecommerce: {
+    transaction_id: 'ORDER_1001',
+    value: 25.00,
+    currency: 'USD',
+    coupon: 'EZ10',
+    items: [{
+      item_id: 'plan_1',
+      item_name: 'Travel eSIM',
+      item_brand: 'EZ eSIM',
+      price: 25.00,
+      quantity: 1
+    }]
+  }
+});`}
+            </pre>
+          </div>
+        )}
+      </main>
+
+      {showImportModal && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
+          <div className="bg-white rounded-xl max-w-lg w-full p-6 space-y-4 shadow-xl">
+            <h3 className="font-bold text-base">Import Social Views, Reach & Engagement CSV</h3>
+            <p className="text-xs text-slate-500">
+              Paste rows from TikTok Studio or Meta Business Suite using columns:{' '}
+              <code className="bg-slate-100 px-1">
+                brand,platform,postTitle,views,reach,savesShares,clicks
+              </code>
+            </p>
+            <textarea
+              rows={6}
+              value={importText}
+              onChange={(e) => setImportText(e.target.value)}
+              placeholder={`brand,platform,postTitle,views,reach,savesShares,clicks\nEZ eSIM,tiktok,Japan Roaming Guide Reel,48200,41500,1920,640\nEZ Mobile,instagram,Unlimited Data Promo Carousel,19400,16200,810,310`}
+              className="w-full border border-slate-300 rounded-lg p-3 text-xs font-mono"
+            />
+            <div className="flex justify-end gap-2">
+              <button
+                onClick={() => setShowImportModal(false)}
+                className="px-4 py-2 text-xs font-medium text-slate-600 hover:bg-slate-100 rounded-lg"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleImportCsv}
+                className="px-4 py-2 text-xs font-semibold bg-indigo-600 text-white rounded-lg hover:bg-indigo-700"
+              >
+                Import Content Data
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
