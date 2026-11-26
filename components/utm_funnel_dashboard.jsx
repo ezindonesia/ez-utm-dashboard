@@ -63,7 +63,7 @@ export default function UTMFunnelDashboard() {
   const [formMedium, setFormMedium] = useState('organic_social');
   const [formCampaign, setFormCampaign] = useState('ez_mobile_always_on');
   const [formContent, setFormContent] = useState('profile_ig_bio');
-  const [formDestination, setFormDestination] = useState('https://globa-ez.com');
+  const [formDestination, setFormDestination] = useState('https://global-ez.com');
   const [formSlug, setFormSlug] = useState('ezm-ig-bio');
 
   const originHost =
@@ -294,13 +294,13 @@ export default function UTMFunnelDashboard() {
         ? `offline_${source}_qr`
         : `content_${source}_post1`
     );
-    setFormDestination('https://globa-ez.com');
+    setFormDestination('https://global-ez.com');
     setFormSlug(`${shortPrefix}-${source.slice(0, 3)}-${Math.floor(100 + Math.random() * 900)}`);
   };
 
   const fullUtmUrl = useMemo(() => {
     try {
-      const url = new URL(formDestination || 'https://globa-ez.com');
+      const url = new URL(formDestination || 'https://global-ez.com');
       url.searchParams.set('utm_source', sanitize(formSource));
       url.searchParams.set('utm_medium', sanitize(formMedium));
       url.searchParams.set('utm_campaign', sanitize(formCampaign));
@@ -492,7 +492,7 @@ export default function UTMFunnelDashboard() {
   const baseVolume = Math.max(totals.sessions, totals.clicks, 1);
   const funnelStages = [
     { label: '1. Tracked Short Link / QR Clicks (Supabase)', value: totals.clicks, color: 'bg-indigo-600' },
-    { label: '2. Website Landing Sessions on globa-ez.com (GA4)', value: totals.sessions, color: 'bg-blue-600' },
+    { label: '2. Website Landing Sessions on global-ez.com (GA4)', value: totals.sessions, color: 'bg-blue-600' },
     { label: '3. Engaged Plan / Product Views (GA4)', value: totals.engaged, color: 'bg-cyan-600' },
     { label: '4. Checkout Started (begin_checkout)', value: totals.checkouts, color: 'bg-teal-600' },
     { label: '5. Completed Orders (purchase)', value: totals.purchases, color: 'bg-emerald-600' },
@@ -510,7 +510,7 @@ export default function UTMFunnelDashboard() {
               <div>
                 <div className="flex items-center gap-2">
                   <h1 className="font-bold text-lg tracking-tight">
-                    Globa-EZ — Marketing & Audience Intelligence Hub
+                    Global-EZ — Marketing & Audience Intelligence Hub
                   </h1>
                   <span
                     className={`text-xs px-2 py-0.5 rounded-full font-medium ${
@@ -523,7 +523,7 @@ export default function UTMFunnelDashboard() {
                   </span>
                 </div>
                 <p className="text-xs text-slate-400">
-                  EZ Mobile &bull; EZ eSIM &bull; Offline QR &bull; Outside Baseline &rarr; globa-ez.com
+                  EZ Mobile &bull; EZ eSIM &bull; Offline QR &bull; Outside Baseline &rarr; global-ez.com
                 </p>
               </div>
             </div>
@@ -666,7 +666,7 @@ export default function UTMFunnelDashboard() {
             <div className="text-xs text-indigo-600 mt-1">Supabase Redirect Logs</div>
           </div>
           <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
-            <div className="text-xs text-slate-500 font-medium">globa-ez.com Sessions</div>
+            <div className="text-xs text-slate-500 font-medium">global-ez.com Sessions</div>
             <div className="text-2xl font-bold mt-1">{totals.sessions.toLocaleString()}</div>
             <div className="text-xs text-slate-500 mt-1">
               {startDate} to {endDate}
@@ -740,7 +740,7 @@ export default function UTMFunnelDashboard() {
             <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
               <div className="flex items-center justify-between mb-4">
                 <div>
-                  <h2 className="font-bold text-base">Full Website Conversion Funnel (globa-ez.com)</h2>
+                  <h2 className="font-bold text-base">Full Website Conversion Funnel (global-ez.com)</h2>
                   <p className="text-xs text-slate-500">
                     Step-by-step progression for selected date range and traffic pillar
                   </p>
@@ -778,7 +778,7 @@ export default function UTMFunnelDashboard() {
                 <div>
                   <h2 className="font-bold text-base">Tracked Short Links & Offline QR Codes</h2>
                   <p className="text-xs text-slate-500">
-                    Real click/scan counts from Supabase paired with GA4 conversions on globa-ez.com
+                    Real click/scan counts from Supabase paired with GA4 conversions on global-ez.com
                   </p>
                 </div>
                 <button
@@ -872,7 +872,7 @@ export default function UTMFunnelDashboard() {
             <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm space-y-6">
               <div>
                 <h2 className="font-bold text-base">
-                  Customer Journey Flow on globa-ez.com ({startDate} &rarr; {endDate})
+                  Customer Journey Flow on global-ez.com ({startDate} &rarr; {endDate})
                 </h2>
                 <p className="text-xs text-slate-500">
                   Real entry channels, landing pages, and checkout completions from Google Analytics 4
@@ -1233,7 +1233,7 @@ export default function UTMFunnelDashboard() {
               <div className="grid sm:grid-cols-3 gap-4">
                 <div className="sm:col-span-2">
                   <label className="block text-xs font-semibold text-slate-700 mb-1">
-                    Destination URL on globa-ez.com
+                    Destination URL on global-ez.com
                   </label>
                   <input
                     type="url"
@@ -1290,7 +1290,7 @@ export default function UTMFunnelDashboard() {
                 </button>
               </div>
               <div className="bg-slate-800 p-4 rounded-lg border border-slate-700 space-y-2">
-                <div className="text-xs text-slate-400">Full Tagged URL Redirecting to globa-ez.com:</div>
+                <div className="text-xs text-slate-400">Full Tagged URL Redirecting to global-ez.com:</div>
                 <div className="font-mono text-xs text-slate-300 break-all">{fullUtmUrl}</div>
               </div>
             </div>
@@ -1302,7 +1302,7 @@ export default function UTMFunnelDashboard() {
             <div className="p-5 border-b border-slate-200">
               <h2 className="font-bold text-base">Checkout Voucher Attribution (order_coupon)</h2>
               <p className="text-xs text-slate-500">
-                Promo codes redeemed on globa-ez.com matched to originating marketing campaigns
+                Promo codes redeemed on global-ez.com matched to originating marketing campaigns
               </p>
             </div>
             <div className="overflow-x-auto">
@@ -1344,9 +1344,9 @@ export default function UTMFunnelDashboard() {
 
         {activeTab === 'setup' && (
           <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm space-y-4">
-            <h2 className="font-bold text-base">globa-ez.com Purchase & Coupon Event Snippet</h2>
+            <h2 className="font-bold text-base">global-ez.com Purchase & Coupon Event Snippet</h2>
             <p className="text-xs text-slate-600">
-              Ensure your globa-ez.com checkout confirmation page pushes coupon and item_brand into GA4:
+              Ensure your global-ez.com checkout confirmation page pushes coupon and item_brand into GA4:
             </p>
             <pre className="bg-slate-900 text-slate-100 p-4 rounded-lg text-xs overflow-x-auto font-mono">
 {`window.dataLayer = window.dataLayer || [];
