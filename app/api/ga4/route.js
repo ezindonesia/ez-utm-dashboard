@@ -7,7 +7,7 @@ export async function GET() {
   const privateKey = process.env.GA4_PRIVATE_KEY?.replace(/\\n/g, '\n');
 
   if (!propertyId || !clientEmail || !privateKey) {
-    return NextResponse.json({ rows: [], demo: true });
+    return NextResponse.json({ trafficRows: [], voucherRows: [], demo: true });
   }
 
   try {
@@ -18,7 +18,7 @@ export async function GET() {
       },
     });
 
-    const [response] = await analyticsDataClient.runReport({
+    const [trafficRes] = await analyticsDataClient.runReport({
       property: `properties/${propertyId}`,
       dateRanges: [{ startDate: '30daysAgo', endDate: 'today' }],
       dimensions: [
@@ -26,17 +26,38 @@ export async function GET() {
         { name: 'sessionMedium' },
         { name: 'sessionCampaignName' },
         { name: 'sessionManualAdContent' },
-        { name: 'orderCoupon' },
+        { name: 'landingPage' },
       ],
       metrics: [
         { name: 'sessions' },
         { name: 'engagedSessions' },
+        { name: 'checkouts' },
         { name: 'ecommercePurchases' },
         { name: 'purchaseRevenue' },
       ],
+      limit: 500,
     });
 
-    return NextResponse.json({ rows: response.rows || [] });
+    const [voucherRes] = await analyticsDataClient.runReport({
+      property: `properties/${propertyId}`,
+      dateRanges: [{ startDate: '30daysAgo', endDate: 'today' }],
+      dimensions: [
+        { name: 'sessionSource' },
+        { name: 'sessionCampaignName' },
+        { name: 'sessionManualAdContent' },
+        { name: 'orderCoupon' },
+      ],
+      metrics: [
+        { name: 'ecommercePurchases' },
+        { name: 'purchaseRevenue' },
+      ],
+      limit: 250,
+    });
+
+    return NextResponse.json({
+      trafficRows: trafficRes.rows || [],
+      voucherRows: voucherRes.rows || [],
+    });
   } catch (err) {
     return NextResponse.json({ error: err.message }, { status: 500 });
   }
